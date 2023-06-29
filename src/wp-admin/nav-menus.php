@@ -396,7 +396,7 @@ switch ( $action ) {
 						set_theme_mod( 'nav_menu_locations', $menu_locations );
 					}
 
-					wp_redirect( admin_url( 'nav-menus.php?menu=' . $_nav_menu_selected_id ) );
+					wp_redirect( admin_url( 'nav-menus.php?action=create&menu=' . $_nav_menu_selected_id ) );
 					exit;
 				}
 			} else {
@@ -469,6 +469,22 @@ switch ( $action ) {
 			set_theme_mod( 'nav_menu_locations', $menu_locations );
 
 			$messages[] = '<div id="message" class="updated notice is-dismissible"><p>' . __( 'Menu locations updated.' ) . '</p></div>';
+		}
+
+		break;
+
+	case 'create':
+		$_menu_object = wp_get_nav_menu_object( $nav_menu_selected_id );
+
+		if ( ! empty( $_menu_object->name ) ) {
+			$messages[] = '<div id="message" class="updated notice is-dismissible"><p>' .
+				sprintf(
+					/* translators: %s: Nav menu title. */
+					__( '%s has been created successfully.' ),
+					'<strong>' . esc_html( $_menu_object->name ) . '</strong>'
+				) . '</p></div>';
+		} else {
+			$messages[] = '<div id="message" class="error notice is-dismissible"><p>' . __( 'The menu has not been created. Please try again.' ) . '</p></div>';
 		}
 
 		break;

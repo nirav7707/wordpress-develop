@@ -1476,7 +1476,7 @@ function wp_nav_menu_update_menu_items( $nav_menu_selected_id, $nav_menu_selecte
 	$messages[] = '<div id="message" class="updated notice is-dismissible"><p>' .
 		sprintf(
 			/* translators: %s: Nav menu title. */
-			__( '%s has been updated.' ),
+			__( '%s menu has been updated.' ),
 			'<strong>' . $nav_menu_selected_title . '</strong>'
 		) . '</p></div>';
 
