@@ -719,6 +719,55 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Ensure updated post have a different slug then already publish post with same name.
+	 *
+	 * @ticket 50447
+	 * @covers ::wp_publish_post
+	 */
+	public function test_updated_draft_post_have_unique_slug_from_publish_post_with_same_title() {
+
+		// Publish post metainfo.
+		$post = array(
+			'post_name'   => 'test',
+			'post_title'  => 'test',
+			'post_status' => 'publish',
+		);
+
+		// Add post.
+		$post_id = self::factory()->post->create( $post );
+
+		// Testcase for publish post with $post_id
+		$post_object = get_post( $post_id );
+		$this->assertSame( 'test', $post_object->post_title );
+		$this->assertSame( 'test', $post_object->post_name );
+
+		// Draft post metainfo.
+		$draft_post = array(
+			'post_title'  => 'test',
+			'post_status' => 'draft',
+			'post_name'   => 'test'
+		);
+
+		// Add draft post.
+		$draft_post_id = self::factory()->post->create( $draft_post );
+
+		// Testcase for draft post with $draft_post_id.
+		$post_object = get_post( $draft_post_id );
+		$this->assertSame( 'test', $post_object->post_title );
+		$this->assertSame( 'draft', $post_object->post_status );
+
+		// Update draft post.
+		wp_publish_post( $draft_post_id );
+
+		// Testcase for updated draft post.
+		$post_object = get_post( $draft_post_id );
+		$this->assertSame( 'test', $post_object->post_title );
+		$this->assertSame( 'publish', $post_object->post_status );
+		$this->assertNotSame( 'test', $post_object->post_name );
+		$this->assertSame( wp_unique_post_slug($post_object->post_name, $post_object->ID, $post_object->post_status, $post_object->post_type, $post_object->post_parent), $post_object->post_name );
+  }
+  
+  /**
 	 * Check if post supports block editor.
 	 *
 	 * @ticket 51819
