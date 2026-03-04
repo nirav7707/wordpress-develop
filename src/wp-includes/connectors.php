@@ -21,14 +21,12 @@ function _wp_connectors_add_settings_menu_item(): void {
 		return;
 	}
 
-	add_submenu_page(
-		'options-general.php',
+	add_menu_page(
 		__( 'Connectors' ),
 		__( 'Connectors' ),
 		'manage_options',
 		'connectors-wp-admin',
-		'wp_connectors_wp_admin_render_page',
-		1
+		'wp_connectors_wp_admin_render_page'
 	);
 }
 add_action( 'admin_menu', '_wp_connectors_add_settings_menu_item' );
